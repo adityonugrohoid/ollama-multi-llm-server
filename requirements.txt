@@ -1,0 +1,12 @@
+# API
+fastapi
+uvicorn
+httpx
+pydantic
+
+# UI
+streamlit
+requests
+
+# Testing
+pytest

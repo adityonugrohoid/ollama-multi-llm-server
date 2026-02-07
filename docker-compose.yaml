@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: llm-api
+    ports:
+      - "8080:8080"
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      - DEFAULT_MODEL=llama3.2:3b
+    depends_on:
+      - ollama
+    restart: unless-stopped
+
+  ui:
+    build:
+      context: .
+      dockerfile: ui/Dockerfile
+    container_name: llm-ui
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://api:8080
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
