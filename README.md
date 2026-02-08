@@ -1,4 +1,4 @@
-# Ollama Multi LLM Server
+# Ollama Multi-LLM Server
 
 Multi-model inference API and playground powered by [Ollama](https://ollama.com). Serve, switch, compare, and benchmark 6 local LLMs through a unified FastAPI backend and Streamlit UI.
 
@@ -26,15 +26,18 @@ Multi-model inference API and playground powered by [Ollama](https://ollama.com)
 - **Multi-model switching** - hot-swap between 6 models via API
 - **Model comparison** - send the same prompt to multiple models side-by-side
 - **Tiered model selection** - fast / balanced / quality tiers for different use cases
-- **Performance benchmarking** - automated speed & throughput comparison
+- **Performance benchmarking** - automated speed and throughput comparison
 - **Interactive playground** - Streamlit UI for experimentation
 
 ## Architecture
 
 ```mermaid
 graph LR
-    A["Streamlit Playground :8501"] --> B["FastAPI API :8080"] --> C["Ollama :11434"]
+    UI["Streamlit Playground<br/>:1501"] --> API["FastAPI API<br/>:1080"]
+    API --> Ollama["Ollama<br/>:11434<br/>(Phase 0)"]
 ```
+
+Ollama runs as a shared service from [Phase 0: ollama-runtime](https://github.com/adityonugrohoid/ollama-runtime). All phases connect via the `ollama-runtime-network` Docker network.
 
 ## Available Models
 
@@ -51,22 +54,32 @@ graph LR
 
 ### Prerequisites
 
-- Docker & Docker Compose
+- Docker and Docker Compose
 - NVIDIA GPU + drivers (optional; CPU fallback works)
+- [Phase 0: ollama-runtime](https://github.com/adityonugrohoid/ollama-runtime) running
 
 ### Start Services
 
 ```bash
-./scripts/start.sh            # start Ollama + API + UI
-./scripts/pull_models.sh      # download models into Ollama
+# 1. Start Ollama (Phase 0)
+cd ~/projects/ollama-runtime && ./scripts/start.sh
+
+# 2. Start API + UI
+cd ~/projects/ollama-multi-llm-server
+./scripts/start.sh
+
+# 3. Download models into Ollama
+./scripts/pull_models.sh
 ```
+
+### Service URLs
 
 | Service | URL |
 |---------|-----|
-| API | http://localhost:8080 |
-| API Docs (Swagger) | http://localhost:8080/docs |
-| Playground UI | http://localhost:8501 |
-| Ollama | http://localhost:11434 |
+| API | http://localhost:1080 |
+| API Docs (Swagger) | http://localhost:1080/docs |
+| Playground UI | http://localhost:1501 |
+| Ollama | http://localhost:11434 (Phase 0) |
 
 ## API Reference
 
@@ -74,13 +87,13 @@ graph LR
 
 ```bash
 # List all models
-curl http://localhost:8080/models/
+curl http://localhost:1080/models/
 
 # Get current model
-curl http://localhost:8080/models/current
+curl http://localhost:1080/models/current
 
 # Switch model
-curl -X POST http://localhost:8080/models/switch \
+curl -X POST http://localhost:1080/models/switch \
   -H "Content-Type: application/json" \
   -d '{"model_id": "mistral:7b"}'
 ```
@@ -89,18 +102,18 @@ curl -X POST http://localhost:8080/models/switch \
 
 ```bash
 # Generate
-curl -X POST http://localhost:8080/inference/generate \
+curl -X POST http://localhost:1080/inference/generate \
   -H "Content-Type: application/json" \
   -d '{"prompt": "Explain Docker in one sentence", "max_tokens": 128}'
 
 # Compare models
-curl -X POST "http://localhost:8080/inference/compare?prompt=What+is+RAG&models=llama3.2:3b&models=mistral:7b"
+curl -X POST "http://localhost:1080/inference/compare?prompt=What+is+RAG&models=llama3.2:3b&models=mistral:7b"
 ```
 
 ### Health
 
 ```bash
-curl http://localhost:8080/health
+curl http://localhost:1080/health
 ```
 
 See [docs/API.md](docs/API.md) for the full API reference.
@@ -127,39 +140,40 @@ pip install -r requirements.txt
 pytest tests/ -v
 ```
 
+11 tests covering all API endpoints.
+
 ## Project Structure
 
 ```
 ollama-multi-llm-server/
-├── api/
-│   ├── main.py                 # FastAPI application entry point
-│   ├── routes/
-│   │   ├── inference.py        # /inference/generate, /inference/compare
-│   │   ├── models.py           # /models, /models/switch, /models/current
-│   │   └── health.py           # /health
-│   └── clients/
-│       └── ollama_client.py    # Ollama HTTP wrapper + model registry
-├── ui/
-│   └── app.py                  # Streamlit model playground
-├── scripts/
-│   ├── pull_models.sh          # Download all 6 models
-│   ├── benchmark.py            # Model speed comparison
-│   └── start.sh                # Launch full stack
-├── tests/
-│   ├── conftest.py
-│   └── test_inference.py       # 11 endpoint tests
-├── requirements.txt                # All deps (unpinned), used by venv + Docker
-├── docs/
-│   ├── images/                     # Screenshots
-│   ├── API.md
-│   └── MODELS.md
-├── docker-compose.yaml
-└── LICENSE
+  api/
+    main.py                 FastAPI application entry point
+    routes/
+      inference.py          /inference/generate, /inference/compare
+      models.py             /models, /models/switch, /models/current
+      health.py             /health
+    clients/
+      ollama_client.py      Ollama HTTP wrapper + model registry
+  ui/
+    app.py                  Streamlit playground (Generate + Compare)
+  scripts/
+    start.sh                Launch API + UI (requires Phase 0)
+    pull_models.sh           Download all 6 models
+    benchmark.py            Model speed comparison
+  tests/
+    conftest.py
+    test_inference.py       11 endpoint tests
+  docs/
+    images/                 Screenshots
+    API.md
+    MODELS.md
+  docker-compose.yaml
+  LICENSE
 ```
 
 ## Tech Stack
 
-- **LLM Runtime**: Ollama
+- **LLM Runtime**: Ollama (via Phase 0)
 - **Backend**: FastAPI + Python 3.12
 - **UI**: Streamlit
 - **HTTP Client**: httpx (async)
@@ -167,7 +181,7 @@ ollama-multi-llm-server/
 
 ## Author
 
-**Adityo Nugroho** [github.com/adityonugrohoid](https://github.com/adityonugrohoid)
+**Adityo Nugroho** - [github.com/adityonugrohoid](https://github.com/adityonugrohoid)
 
 ## License
 

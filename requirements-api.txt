@@ -1,0 +1,6 @@
+# API dependencies
+fastapi
+uvicorn
+httpx
+pydantic
+pytest
