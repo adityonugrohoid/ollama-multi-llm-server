@@ -33,3 +33,6 @@ ollama_data/
 .pytest_cache/
 htmlcov/
 .coverage
+
+# Archive files
+archive/
