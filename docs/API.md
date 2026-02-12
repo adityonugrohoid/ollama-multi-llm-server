@@ -47,14 +47,11 @@ List all available models with the current selection.
 ```json
 {
   "models": [
-    {"id": "gemma2:2b", "size": "1.6GB", "tier": "fast"},
-    {"id": "llama3.2:1b", "size": "1.3GB", "tier": "fast"},
-    {"id": "phi3:3.8b", "size": "2.2GB", "tier": "balanced"},
-    {"id": "llama3.2:3b", "size": "2.0GB", "tier": "balanced"},
-    {"id": "mistral:7b", "size": "4.4GB", "tier": "quality"},
-    {"id": "llama3.1:8b", "size": "4.9GB", "tier": "quality"}
+    {"id": "llama3.2:3b", "size": "2.0GB", "tier": "Meta"},
+    {"id": "qwen2.5:3b", "size": "1.9GB", "tier": "Alibaba"},
+    {"id": "phi3.5:3.8b", "size": "2.2GB", "tier": "Microsoft"}
   ],
-  "current": "gemma2:2b"
+  "current": "llama3.2:3b"
 }
 ```
 
@@ -77,12 +74,12 @@ Switch the active model.
 
 **Request body:**
 ```json
-{"model_id": "mistral:7b"}
+{"model_id": "qwen2.5:3b"}
 ```
 
 **Response:**
 ```json
-{"status": "switched", "model": "mistral:7b"}
+{"status": "switched", "model": "qwen2.5:3b"}
 ```
 
 **Errors:**
@@ -126,7 +123,7 @@ Compare responses from multiple models on the same prompt.
 | Param | Type | Default | Description |
 |-------|------|---------|-------------|
 | `prompt` | string | *required* | Input prompt |
-| `models` | list[string] | `["llama3.2:3b", "mistral:7b"]` | Models to compare |
+| `models` | list[string] | `["llama3.2:3b", "qwen2.5:3b"]` | Models to compare |
 
 **Response:**
 ```json
@@ -141,7 +138,7 @@ Compare responses from multiple models on the same prompt.
     },
     {
       "response": "RAG stands for...",
-      "model": "mistral:7b",
+      "model": "qwen2.5:3b",
       "latency_ms": 2100,
       "tokens_generated": 92
     }

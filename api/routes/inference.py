@@ -46,7 +46,7 @@ async def generate(request: GenerateRequest):
 async def compare_models(
     prompt: str = Query(..., description="The prompt to send to each model"),
     models: list[str] = Query(
-        default=["llama3.2:3b", "mistral:7b"],
+        default=["llama3.2:3b", "qwen2.5:3b"],
         description="Models to compare",
     ),
 ):

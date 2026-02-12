@@ -88,7 +88,7 @@ with tab_compare:
     compare_models = st.multiselect(
         "Select models to compare",
         model_options,
-        default=["llama3.2:1b", "llama3.2:3b", "llama3.1:8b"],
+        default=["llama3.2:3b", "qwen2.5:3b", "phi3.5:3.8b"],
     )
 
     if st.button("Compare", type="primary", disabled=not compare_prompt):
