@@ -49,12 +49,12 @@ List all available models with the current selection.
   "models": [
     {"id": "gemma2:2b", "size": "1.6GB", "tier": "fast"},
     {"id": "llama3.2:1b", "size": "1.3GB", "tier": "fast"},
-    {"id": "llama3.2:3b", "size": "2.0GB", "tier": "balanced"},
     {"id": "phi3:3.8b", "size": "2.2GB", "tier": "balanced"},
+    {"id": "llama3.2:3b", "size": "2.0GB", "tier": "balanced"},
     {"id": "mistral:7b", "size": "4.4GB", "tier": "quality"},
     {"id": "llama3.1:8b", "size": "4.9GB", "tier": "quality"}
   ],
-  "current": "llama3.2:3b"
+  "current": "gemma2:2b"
 }
 ```
 

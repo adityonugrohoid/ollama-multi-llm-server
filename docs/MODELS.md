@@ -13,8 +13,8 @@
 
 | Model | Parameters | Size | Best For |
 |-------|-----------|------|----------|
-| `llama3.2:3b` | 3B | 2.0 GB | General-purpose inference, development default |
 | `phi3:3.8b` | 3.8B | 2.2 GB | Reasoning, code generation, structured output |
+| `llama3.2:3b` | 3B | 2.0 GB | General-purpose inference |
 
 ### Quality Tier (3–10 second response)
 
@@ -27,7 +27,7 @@
 
 | Scenario | Recommended | Why |
 |----------|-------------|-----|
-| Development / testing | `llama3.2:3b` | Good balance of speed and quality |
+| Development / testing | `gemma2:2b` | Default – fast and light for dev  |
 | Demos / presentations | `llama3.1:8b` | Best output quality |
 | Benchmarking latency | `gemma2:2b` | Fastest response times |
 | Code generation | `phi3:3.8b` | Strong at structured/code tasks |

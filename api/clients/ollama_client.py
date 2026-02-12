@@ -6,8 +6,8 @@ import os
 AVAILABLE_MODELS = [
     {"id": "gemma2:2b", "size": "1.6GB", "tier": "fast"},
     {"id": "llama3.2:1b", "size": "1.3GB", "tier": "fast"},
-    {"id": "llama3.2:3b", "size": "2.0GB", "tier": "balanced"},
     {"id": "phi3:3.8b", "size": "2.2GB", "tier": "balanced"},
+    {"id": "llama3.2:3b", "size": "2.0GB", "tier": "balanced"},
     {"id": "mistral:7b", "size": "4.4GB", "tier": "quality"},
     {"id": "llama3.1:8b", "size": "4.9GB", "tier": "quality"},
 ]
@@ -18,7 +18,7 @@ VALID_MODEL_IDS = {m["id"] for m in AVAILABLE_MODELS}
 class OllamaClient:
     def __init__(self):
         self.host = os.getenv("OLLAMA_HOST", "http://localhost:11434")
-        self.current_model = os.getenv("DEFAULT_MODEL", "llama3.2:3b")
+        self.current_model = os.getenv("DEFAULT_MODEL", "gemma2:2b")
 
     def get_current_model(self) -> str:
         return self.current_model

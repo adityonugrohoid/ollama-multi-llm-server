@@ -1,33 +1,64 @@
-# Ollama Multi-LLM Server
+# GenAI Portfolio Suite – Phase 1: Ollama Multi-LLM Server
 
-Multi-model inference API and playground powered by [Ollama](https://ollama.com). Serve, switch, compare, and benchmark 6 local LLMs through a unified FastAPI backend and Streamlit UI.
+Multi-model inference API and playground powered by [Ollama](https://ollama.com).  
+Serve, switch, compare, and benchmark 6 local LLMs through a unified FastAPI backend and Streamlit UI.
 
-**Part of the [GenAI Portfolio Suite](https://github.com/adityonugrohoid) - Phase 1: Local LLM Serving.**
+**Part of the [GenAI Portfolio Suite](https://github.com/adityonugrohoid).**  
+> **Phase:** 1 – Local LLM Serving (multi-model API + playground)
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Playground UI](#playground-ui)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Available Models](#available-models)
+- [Quick Start](#quick-start)
+- [API Reference](#api-reference)
+- [Benchmarking](#benchmarking)
+- [Testing](#testing)
+- [Project Structure](#project-structure)
+- [Tech Stack](#tech-stack)
+- [Author](#author)
+- [License](#license)
+
+---
+
+## Overview
+
+`ollama-multi-llm-server` exposes a **multi-model inference API** and **Streamlit playground** on top of a shared Ollama runtime (Phase 0).
+
+Use it to:
+- Experiment with multiple local LLMs
+- Compare responses and latency across models
+- Provide a simple API layer for other tools and services
+
+---
 
 ## Playground UI
 
-**Generate** - Select any model from the dropdown, tune temperature and max tokens, and get responses with latency and token count metadata.
+**Generate** – Select any model from the dropdown, tune temperature and max tokens, and get responses with latency and token count metadata.
 
 ![Generate tab - model selection, parameter tuning, and response metadata](docs/images/multi_llm_playground.png)
 
-**Compare Models** - Send the same prompt to multiple models side-by-side. Responses are displayed in columns for direct quality and speed comparison.
+**Compare Models** – Send the same prompt to multiple models side-by-side. Responses are displayed in columns for direct quality and speed comparison.
 
 ![Compare tab - side-by-side responses from llama3.2:1b, llama3.2:3b, and llama3.1:8b](docs/images/compare_models.png)
 
-**Highlights:**
-- **Model switcher** - dropdown with all 6 models (gemma2:2b through llama3.1:8b)
-- **Parameter controls** - temperature (0.0-2.0) and max tokens (64-2048) sliders
-- **Response metadata** - model name, latency in ms, and token count on every response
-- **Multi-model comparison** - select 2+ models and compare outputs in parallel
-- **Ollama status** - live connection indicator in the sidebar
+---
 
 ## Features
 
-- **Multi-model switching** - hot-swap between 6 models via API
-- **Model comparison** - send the same prompt to multiple models side-by-side
-- **Tiered model selection** - fast / balanced / quality tiers for different use cases
-- **Performance benchmarking** - automated speed and throughput comparison
-- **Interactive playground** - Streamlit UI for experimentation
+- **Multi-model switching** – hot-swap between 6 models via API
+- **Model comparison** – send the same prompt to multiple models side-by-side
+- **Tiered model selection** – fast / balanced / quality tiers for different use cases
+- **Performance benchmarking** – automated speed and throughput comparison
+- **Interactive playground** – Streamlit UI for experimentation
+- **Ollama status** – live connection indicator in the sidebar
+
+---
 
 ## Architecture
 
@@ -37,18 +68,25 @@ graph LR
     API --> Ollama["Ollama<br/>:11434<br/>(Phase 0)"]
 ```
 
-Ollama runs as a shared service from [Phase 0: ollama-runtime](https://github.com/adityonugrohoid/ollama-runtime). All phases connect via the `ollama-runtime-network` Docker network.
+Ollama runs as a shared service from **Phase 0: [ollama-runtime](https://github.com/adityonugrohoid/ollama-runtime)**.  
+All phases connect via the `ollama-runtime-network` Docker network.
+
+---
 
 ## Available Models
 
-| Model | Size | Tier | Use Case |
-|-------|------|------|----------|
-| `gemma2:2b` | 1.6 GB | Fast | Quick responses, simple queries |
-| `llama3.2:1b` | 1.3 GB | Fast | Ultra-fast, edge deployment |
-| `llama3.2:3b` | 2.0 GB | Balanced | General local inference (default) |
-| `phi3:3.8b` | 2.2 GB | Balanced | Reasoning, code tasks |
-| `mistral:7b` | 4.4 GB | Quality | Instruction-following |
-| `llama3.1:8b` | 4.9 GB | Quality | Best quality, complex tasks |
+> **Default model across Phase 0–1–2:** `gemma2:2b`
+
+| Model        | Size  | Tier     | Use Case                             |
+|-------------|-------|----------|--------------------------------------|
+| `gemma2:2b` | 1.6 GB| Fast     | **Default** – quick Q&A, prototyping|
+| `llama3.2:1b` | 1.3 GB| Fast   | Ultra-fast, edge deployment         |
+| `phi3:3.8b` | 2.2 GB| Balanced | Reasoning, code tasks               |
+| `llama3.2:3b` | 2.0 GB| Balanced | General-purpose local inference   |
+| `mistral:7b` | 4.4 GB| Quality  | Instruction-following               |
+| `llama3.1:8b` | 4.9 GB| Quality| Best quality, complex tasks         |
+
+---
 
 ## Quick Start
 
@@ -56,7 +94,7 @@ Ollama runs as a shared service from [Phase 0: ollama-runtime](https://github.co
 
 - Docker and Docker Compose
 - NVIDIA GPU + drivers (optional; CPU fallback works)
-- [Phase 0: ollama-runtime](https://github.com/adityonugrohoid/ollama-runtime) running
+- **Phase 0:** [ollama-runtime](https://github.com/adityonugrohoid/ollama-runtime) running
 
 ### Start Services
 
@@ -80,6 +118,8 @@ cd ~/projects/ollama-multi-llm-server
 | API Docs (Swagger) | http://localhost:1080/docs |
 | Playground UI | http://localhost:1501 |
 | Ollama | http://localhost:11434 (Phase 0) |
+
+---
 
 ## API Reference
 
@@ -118,6 +158,8 @@ curl http://localhost:1080/health
 
 See [docs/API.md](docs/API.md) for the full API reference.
 
+---
+
 ## Benchmarking
 
 ```bash
@@ -131,6 +173,8 @@ python3 scripts/benchmark.py --models gemma2:2b llama3.2:3b mistral:7b
 python3 scripts/benchmark.py --output results.json
 ```
 
+---
+
 ## Testing
 
 ```bash
@@ -142,9 +186,11 @@ pytest tests/ -v
 
 11 tests covering all API endpoints.
 
+---
+
 ## Project Structure
 
-```
+```text
 ollama-multi-llm-server/
   api/
     main.py                 FastAPI application entry point
@@ -158,7 +204,7 @@ ollama-multi-llm-server/
     app.py                  Streamlit playground (Generate + Compare)
   scripts/
     start.sh                Launch API + UI (requires Phase 0)
-    pull_models.sh           Download all 6 models
+    pull_models.sh          Download all 6 models
     benchmark.py            Model speed comparison
   tests/
     conftest.py
@@ -171,18 +217,25 @@ ollama-multi-llm-server/
   LICENSE
 ```
 
+---
+
 ## Tech Stack
 
-- **LLM Runtime**: Ollama (via Phase 0)
-- **Backend**: FastAPI + Python 3.12
-- **UI**: Streamlit
-- **HTTP Client**: httpx (async)
-- **Infrastructure**: Docker Compose
+- **LLM Runtime:** Ollama (via Phase 0)
+- **Backend:** FastAPI + Python 3.12
+- **UI:** Streamlit
+- **HTTP Client:** httpx (async)
+- **Infrastructure:** Docker Compose
+
+---
 
 ## Author
 
-**Adityo Nugroho** - [github.com/adityonugrohoid](https://github.com/adityonugrohoid)
+**Adityo Nugroho** – [github.com/adityonugrohoid](https://github.com/adityonugrohoid)
+
+---
 
 ## License
 
-[MIT](LICENSE)
+MIT License – see [LICENSE](LICENSE).
+

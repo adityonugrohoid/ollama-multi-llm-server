@@ -9,7 +9,7 @@ services:
       - "1080:8080"
     environment:
       - OLLAMA_HOST=http://ollama:11434
-      - DEFAULT_MODEL=llama3.2:3b
+      - DEFAULT_MODEL=gemma2:2b
     networks:
       - default
       - ollama-network
