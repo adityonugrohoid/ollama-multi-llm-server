@@ -6,7 +6,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg)](https://fastapi.tiangolo.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Multi-model inference API and Streamlit playground over 3 local Ollama LLMs - serve, switch, compare, benchmark**
+**Multi-model inference API and Streamlit playground over 3 local Ollama LLMs: serve, switch, compare, benchmark**
 
 [Getting Started](#getting-started) | [Usage](#usage) | [Architecture](#architecture)
 
